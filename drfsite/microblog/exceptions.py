@@ -1,0 +1,3 @@
+
+class UserNotExists(Exception):
+    ...
