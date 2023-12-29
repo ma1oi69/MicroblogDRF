@@ -19,5 +19,8 @@ class TweetsSerializer(serializers.Serializer):
         return instance
 
 
+class CreateTweetsSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=400)
+
 
 

@@ -8,3 +8,19 @@ class CommentsSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
+    def update(self, instance, validated_data):
+        """
+        Обновление комментария с использованием данных запроса.
+        """
+        instance.title = validated_data.get('title', instance.title)
+        instance.save()
+        return instance
+
+
+class CreateCommentsSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=200)
+
+
+class UpdateCommentsSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=200)
+    tweet_id = serializers.IntegerField()

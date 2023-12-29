@@ -4,8 +4,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from microblog.models.twits import Twits
-from microblog.serializers.tweets import TweetsSerializer
+from microblog.serializers.tweets import TweetsSerializer, CreateTweetsSerializer
 from microblog.services.twits import create_twits
+
+from rest_framework.permissions import IsAuthenticated
 
 
 @extend_schema_view(
@@ -17,6 +19,8 @@ from microblog.services.twits import create_twits
     ),
 )
 class TwitsAPIView(APIView):
+    permission_classes = (IsAuthenticated, )
+
     @extend_schema(
         summary="Получить список постов этого юзера",
         responses={200: TweetsSerializer(many=True)},
@@ -31,7 +35,7 @@ class TwitsAPIView(APIView):
 
     @extend_schema(
         summary="Создание нового поста",
-        request=TweetsSerializer,
+        request=CreateTweetsSerializer,
         responses={
             201: {'description': 'Twit created successfully'},
             400: {'description': 'Invalid request data'}
@@ -48,4 +52,3 @@ class TwitsAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
