@@ -8,7 +8,6 @@ from microblog.views.register import RegisterAPIView
 from microblog.views.comments import CreateCommentsAPIView, DeleteCommentAPIView, UpdateCommentAPIView
 from microblog.views.twits import TwitsAPIView
 from microblog.views.twits_for_id import TwitsForIdAPIView
-from microblog.views.logout import LogoutAPIView
 
 
 urlpatterns = [
@@ -21,7 +20,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     path('api/register/', RegisterAPIView.as_view()),
-    path('api/logout/', LogoutAPIView.as_view()),
+
 
     path('api/twits/comments/', CreateCommentsAPIView.as_view()),
     path('api/twits/comments/delete/<int:pk>/', DeleteCommentAPIView.as_view()),

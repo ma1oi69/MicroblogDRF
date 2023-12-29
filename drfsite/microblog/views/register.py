@@ -8,6 +8,7 @@ from microblog.services.twits import create_user
 from microblog.validators.username_email import validators_username_email
 
 from drf_spectacular.utils import extend_schema_view, extend_schema
+from microblog.serializers.register import RegisterSerializer
 
 
 @extend_schema_view(
@@ -22,6 +23,7 @@ class RegisterAPIView(APIView):
 
     @extend_schema(
         summary="Регистрация нового пользователя",
+        request=RegisterSerializer,
         responses={
             201: {'description': 'User registered successfully'},
             400: {'description': 'Invalid request data'}
