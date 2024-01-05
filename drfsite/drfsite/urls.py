@@ -8,6 +8,10 @@ from microblog.views.register import RegisterAPIView
 from microblog.views.comments import CreateCommentsAPIView, DeleteCommentAPIView, UpdateCommentAPIView
 from microblog.views.twits import TwitsAPIView
 from microblog.views.twits_for_id import TwitsForIdAPIView
+from microblog.views.profile import UserProfileAPIView
+from django.conf import settings
+from django.conf.urls.static import static
+from microblog.views.subsciber import SubscribeAPIView
 
 
 urlpatterns = [
@@ -30,4 +34,12 @@ urlpatterns = [
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
+
+    path('api/profile/<username>/', UserProfileAPIView.as_view()),
+    path('api/profile/<username>/edit/', UserProfileAPIView.as_view()),
+
+    path('api/follow/', SubscribeAPIView.as_view())
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,13 +1,12 @@
-from django.core.exceptions import ObjectDoesNotExist
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from microblog.models import CustomUser
-from microblog.services.twits import create_user
 from microblog.validators.username_email import validators_username_email
 
 from drf_spectacular.utils import extend_schema_view, extend_schema
+from rest_framework.permissions import AllowAny
 from microblog.serializers.register import RegisterSerializer
 
 
@@ -20,6 +19,7 @@ class RegisterAPIView(APIView):
     """
     Описание представления RegisterAPIView.
     """
+    permission_classes = [AllowAny,]
 
     @extend_schema(
         summary="Регистрация нового пользователя",
@@ -33,16 +33,17 @@ class RegisterAPIView(APIView):
         """
         Регистрация нового пользователя.
         """
-        email = request.data.get('email')
-        password = request.data.get('password')
-        username = request.data.get('username')
+        user = RegisterSerializer(data=request.data)
+        if user.is_valid():
+            validation_response = validators_username_email(username=request.data['username'],
+                                                            email=request.data['email'])
+            if validation_response is not None:
+                return validation_response
 
-        validation_response = validators_username_email(username=username, email=email)
-        if validation_response is not None:
-            return validation_response
-
-        create_user(email, password, username)
-        return Response('NICE', status=status.HTTP_201_CREATED)
+            user.save()
+            return Response('User was created', status=status.HTTP_201_CREATED)
+        else:
+            return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # @extend_schema(
     #     summary="Удаление пользователя по идентификатору",

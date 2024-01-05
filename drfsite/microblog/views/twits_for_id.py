@@ -7,9 +7,6 @@ from microblog.serializers.tweets import TweetsSerializer
 from drf_spectacular.utils import extend_schema_view, extend_schema
 
 from django.shortcuts import get_object_or_404
-from microblog.permissions.TwitsCreatorOrAdmin import IsAdminOrCreatorTwits
-from rest_framework.permissions import IsAdminUser
-
 
 @extend_schema_view(
     create=extend_schema(
@@ -37,7 +34,7 @@ from rest_framework.permissions import IsAdminUser
 )
 class TwitsForIdAPIView(APIView):
 
-    permission_classes = (IsAdminOrCreatorTwits, )
+    # permission_classes = (IsAdminOrCreatorTwits, )
 
     @extend_schema(
         summary="Получить пост по ID",
