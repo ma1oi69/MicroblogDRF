@@ -4,12 +4,12 @@ from microblog.models.comments import Comments
 
 
 def create_twits(title, user):
-    tweet = Twits.objects.create(title=title.data.get('title'), user_id=user)
+    Twits.objects.create(title=title.data.get('title'), user_id=user)
     return JsonResponse({'message': 'Tweet created'})
 
 
 def create_comment(title, tweet_id):
-    comment = Comments.objects.create(title=title, tweet_id=tweet_id)
+    Comments.objects.create(title=title, tweet_id=tweet_id)
     return JsonResponse({'message': 'Comment create'})
 
 

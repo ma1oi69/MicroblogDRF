@@ -8,6 +8,10 @@ class UserNotExists(Exception):
     ...
 
 
+class TokenDoesNotExist(Exception):
+    ...
+
+
 class TwitsNotExists(Exception):
     ...
 

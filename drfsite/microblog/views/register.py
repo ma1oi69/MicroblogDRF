@@ -41,7 +41,7 @@ class RegisterAPIView(APIView):
                 return validation_response
 
             user.save()
-            return Response('User was created', status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         else:
             return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
 

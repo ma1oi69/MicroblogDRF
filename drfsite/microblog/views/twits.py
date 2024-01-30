@@ -29,8 +29,8 @@ class TwitsAPIView(APIView):
         """
         Получить список постов.
         """
-        twits = Twits.objects.filter(user_id=request.user.id)
-        serializer = TweetsSerializer(twits, many=True)
+        tweets = Twits.objects.order_by('-created_at')
+        serializer = TweetsSerializer(tweets, many=True)
         return Response({'twits': serializer.data})
 
     @extend_schema(
@@ -46,7 +46,7 @@ class TwitsAPIView(APIView):
         Создание нового поста.
         """
         user = request.user.id
-        serializer = TweetsSerializer(data=request.data)
+        serializer = CreateTweetsSerializer(data=request.data)
         if serializer.is_valid():
             create_twits(serializer, user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -10,6 +10,7 @@ from microblog.services.twits import create_comment
 
 from drf_spectacular.utils import extend_schema_view, extend_schema
 
+
 @extend_schema_view(
     create=extend_schema(
         summary="Создание комментария для поста",
@@ -41,6 +42,20 @@ class CreateCommentsAPIView(APIView):
     """
 
     @extend_schema(
+        summary="Получение комментариев для поста",
+        responses={
+            200: CommentsSerializer(many=True)
+        }
+    )
+    def get(self, request, tweet_id):
+        """
+        Получение комментариев для поста.
+        """
+        comments = Comments.objects.filter(tweet_id=tweet_id).order_by('-created_at')
+        serializer = CommentsSerializer(comments, many=True)
+        return Response({'comments': serializer.data})
+
+    @extend_schema(
         summary="Создание комментария для поста",
         request=CreateCommentsSerializer,
         responses={
@@ -49,23 +64,25 @@ class CreateCommentsAPIView(APIView):
             404: {'description': 'Tweet not found'}
         }
     )
-    def post(self, request):
+    def post(self, request, tweet_id):
         """
         Создание комментария для поста.
         """
         title = request.data.get('title')
-        tweet_id = request.data.get('tweet_id')
+        tweet = None
 
         try:
             tweet = Twits.objects.get(id=tweet_id)
         except Twits.DoesNotExist:
             return Response({"detail": "Tweet does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = CommentsSerializer(data=request.data)
+        serializer = CreateCommentsSerializer(data=request.data)
 
         if serializer.is_valid():
             create_comment(title, tweet_id)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            tweet.answers += 1
+            tweet.save()
+            return Response(status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

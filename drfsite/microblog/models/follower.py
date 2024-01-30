@@ -1,7 +1,6 @@
 from django.db import models
-from .user import CustomUser
 
 
 class Follower(models.Model):
-    followers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='followers')
-    subscriptions = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='subscribers')
+    followers = models.ManyToManyField('CustomUser', related_name='subscribers', blank=True)
+    subscriptions = models.ManyToManyField('CustomUser', related_name='followings', blank=True)

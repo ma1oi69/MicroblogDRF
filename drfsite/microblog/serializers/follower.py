@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from microblog.models.user import CustomUser
 
 
-class FollowersSerializer(serializers.Serializer):
-    followers = serializers.IntegerField()
-    subscriptions = serializers.IntegerField()
+class SubscriptionSerializer(serializers.ModelSerializer):
+    follower = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())
+    following = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())

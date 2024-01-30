@@ -8,10 +8,12 @@ from microblog.views.register import RegisterAPIView
 from microblog.views.comments import CreateCommentsAPIView, DeleteCommentAPIView, UpdateCommentAPIView
 from microblog.views.twits import TwitsAPIView
 from microblog.views.twits_for_id import TwitsForIdAPIView
-from microblog.views.profile import UserProfileAPIView
+from microblog.views.profile import UserProfileAPIView, ChangePasswordAPIView
 from django.conf import settings
 from django.conf.urls.static import static
-from microblog.views.subsciber import SubscribeAPIView
+
+from microblog.views.views import LogoutView
+from microblog.views.following import SubscribeAPIView
 
 
 urlpatterns = [
@@ -23,10 +25,13 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
+    path('api/logout/', LogoutView.as_view(), name='rest_logout'),
+
     path('api/register/', RegisterAPIView.as_view()),
 
+    path('api/subscribe/', SubscribeAPIView.as_view()),
 
-    path('api/twits/comments/', CreateCommentsAPIView.as_view()),
+    path('api/twits/<int:tweet_id>/comments/', CreateCommentsAPIView.as_view()),
     path('api/twits/comments/delete/<int:pk>/', DeleteCommentAPIView.as_view()),
     path('api/twits/comments/update/<int:pk>/', UpdateCommentAPIView.as_view()),
 
@@ -35,8 +40,8 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
 
-    path('api/profile/<username>/', UserProfileAPIView.as_view()),
-    path('api/profile/<username>/edit/', UserProfileAPIView.as_view()),
+    path('api/profile/<int:pk>/', UserProfileAPIView.as_view()),
+    path('api/profile/<int:pk>/edit/password/', ChangePasswordAPIView.as_view()),
 
     path('api/follow/', SubscribeAPIView.as_view())
 ]

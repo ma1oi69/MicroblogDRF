@@ -8,6 +8,7 @@ from drf_spectacular.utils import extend_schema_view, extend_schema
 
 from django.shortcuts import get_object_or_404
 
+
 @extend_schema_view(
     create=extend_schema(
         summary="Получить пост по id",

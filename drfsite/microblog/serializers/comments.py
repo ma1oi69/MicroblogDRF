@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from microblog.models.comments import Comments
 
 
 class CommentsSerializer(serializers.Serializer):

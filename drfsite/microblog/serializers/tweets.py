@@ -18,9 +18,12 @@ class TweetsSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+    def create(self, validated_data):
+        return Twits.objects.create(**validated_data)
+
 
 class CreateTweetsSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=400)
+    title = serializers.CharField(max_length=400, required=True)
 
 
 

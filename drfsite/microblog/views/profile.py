@@ -9,17 +9,18 @@ from django.contrib.auth.hashers import check_password
 
 class UserProfileAPIView(APIView):
 
-    def get(self, request, username):
-
+    def get(self, request, pk):
         try:
-            user_profile = CustomUser.objects.get(username=username)
+            user_profile = CustomUser.objects.get(id=pk)
             serializer = UserProfileSerializer(user_profile)
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         except UserNotExists:
             return Response('Profile user not found', status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, username):
+
+class ChangePasswordAPIView(APIView):
+
+    def post(self, request, pk):
         user = request.user
         old_password = request.data.get('old_password')
         new_password = request.data.get('new_password')
